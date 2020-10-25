@@ -1,0 +1,20 @@
+{
+  "name": "design-of-machinery",
+  "version": "1.0.0",
+  "description": "Repository with design of machinery scripts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felipeaamacedo/design-of-machinery.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felipeaamacedo/design-of-machinery/issues"
+  },
+  "homepage": "https://github.com/felipeaamacedo/design-of-machinery#readme"
+}
