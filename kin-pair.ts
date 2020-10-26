@@ -16,7 +16,7 @@ let PSI_dd:number = 0;
 
 /* --- CALCULATION --- */
 
-function RR(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:number, PHI_dd:number, PSI_dd:number):number[] {
+function RR_Dir(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:number, PHI_dd:number, PSI_dd:number):number[] {
 	let X = c*Math.cos(PHI) + b*Math.cos(PSI)	
 	let Y = c*Math.sin(PHI) + b*Math.sin(PSI)
 
@@ -39,4 +39,4 @@ function RR(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:numb
 }
 
 
-console.log(RR(c,b,PHI,PSI,PHI_d,PSI_d,PHI_dd,PSI_dd))
+console.log(RR_Dir(c,b,PHI,PSI,PHI_d,PSI_d,PHI_dd,PSI_dd))
