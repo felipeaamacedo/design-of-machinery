@@ -16,7 +16,7 @@ let PSI_dd:number = 0;
 
 /* --- CALCULATION --- */
 
-function RR(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:number, PHI_dd:number, PSI_dd:number):number[] {
+function RR_Fwd(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:number, PHI_dd:number, PSI_dd:number):number[] {
 	let X = c*Math.cos(PHI) + b*Math.cos(PSI)	
 	let Y = c*Math.sin(PHI) + b*Math.sin(PSI)
 
@@ -38,5 +38,43 @@ function RR(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:numb
 	)
 }
 
+function RR_Inv(b:number, c:number, Xa:number, Ya:number, Xq:number, Yq:number, X_d:number, Y_d:number, X_dd:number, Y_dd:number):number[]{
 
-console.log(RR(c,b,PHI,PSI,PHI_d,PSI_d,PHI_dd,PSI_dd))
+	//INVERSE KINEMATICS (POSITION CALCULATION)
+	let X = Xa - Xq
+       	let Y = Ya - Yq
+
+	let A:number = X**2 + Y**2 + c**2 - b**2 + 2*c*X
+	let B:number = - 2*c*Y
+	let C:number = X**2 + Y**2 + c**2 - b**2 - 2*c*X
+	
+	let t1 = (- B + Math.sqrt(B**2 - A*C))/A
+	let t2 = (- B - Math.sqrt(B**2 - A*C))/A
+
+	let PHI_1 = 2*Math.atan(t1)
+	let PHI_2 = 2*Math.atan(t2)
+
+	let U1:number = (X - c*Math.cos(PHI_1))/b
+	let V1:number = (Y - c*Math.sin(PHI_1))/b	
+
+	let U2:number = (X - c*Math.cos(PHI_2))/b
+	let V2:number = (Y - c*Math.sin(PHI_2))/b	
+
+	let PSI_1:number = Math.atan2(V1,U2)
+	let PSI_2:number = Math.atan2(V2,U2)
+	
+	// INVERSE KINEMATICS (VELOCITY CALCULATION)
+
+	return(
+	[
+		PHI_1,
+		PHI_2,
+		PSI_1,
+		PSI_2
+	]
+	)
+}
+
+
+
+console.log(RR_Fwd(c,b,PHI,PSI,PHI_d,PSI_d,PHI_dd,PSI_dd))
