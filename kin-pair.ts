@@ -39,7 +39,6 @@ function RR_Fwd(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:
 }
 
 function RR_Inv(b:number, c:number, Xa:number, Ya:number, Xq:number, Yq:number, X_d:number, Y_d:number, X_dd:number, Y_dd:number):number[]{
-
 	//INVERSE KINEMATICS (POSITION CALCULATION)
 	let X = Xa - Xq
        	let Y = Ya - Yq
