@@ -1,3 +1,5 @@
+import * as math from 'mathjs'
+
 //This is a code that has the function to analyse the main types of kinematics pairs.
 //
 
@@ -64,8 +66,20 @@ function RR_Inv(b:number, c:number, Xa:number, Ya:number, Xq:number, Yq:number, 
 	let PSI:number = Math.atan2(V,U)
 	
 	// INVERSE KINEMATICS (VELOCITY CALCULATION)
+	
+	let D:math.Matrix = math.matrix([[- c* Math.sin(PHI),	- b*Math.sin(PSI)],
+			    [c*Math.cos(PHI), 		b*Math.cos(PSI)]])	
 
-	return [PHI, PSI]
+	let E:math.Matrix = math.matrix([[X_d],
+			       [Y_d]])
+
+	let E_inv:math.Matrix = math.inv(E)
+
+        let F:math.Matrix = math.multiply(D,E_inv) 
+	let PHI_d:number = F.subset(math.index(0,0))
+	let PSI_d:number = F.subset(math.index(1,0))
+
+	return [PHI, PSI, PHI_d, PSI_d]
 }
 
 function RP_Fwd(a:number, Xq:number, Yq:number, r:number, PHI:number, r_d:number, PHI_d:number, r_dd:number, PHI_dd:number):number[]{
