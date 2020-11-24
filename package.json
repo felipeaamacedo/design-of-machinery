@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/felipeaamacedo/design-of-machinery/issues"
   },
-  "homepage": "https://github.com/felipeaamacedo/design-of-machinery#readme"
+  "homepage": "https://github.com/felipeaamacedo/design-of-machinery#readme",
+  "dependencies": {
+    "@types/mathjs": "^6.0.7",
+    "mathjs": "^8.0.1"
+  }
 }
