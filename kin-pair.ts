@@ -1,4 +1,4 @@
-import * as math from 'mathjs'
+import matrixts from "@felipeaamacedo/matrix-ts"
 
 //This is a code that has the function to analyse the main types of kinematics pairs.
 //
@@ -67,19 +67,48 @@ function RR_Inv(b:number, c:number, Xa:number, Ya:number, Xq:number, Yq:number, 
 	
 	// INVERSE KINEMATICS (VELOCITY CALCULATION)
 	
-	let D:math.Matrix = math.matrix([[- c* Math.sin(PHI),	- b*Math.sin(PSI)],
-			    [c*Math.cos(PHI), 		b*Math.cos(PSI)]])	
+	let D:matrixts.Matrix = new matrixts.Matrix(2,2)
+    D.data = [
+                [- c* Math.sin(PHI),	- b*Math.sin(PSI)],
+			    [c*Math.cos(PHI), 		b*Math.cos(PSI)]
+            ]	
 
-	let E:math.Matrix = math.matrix([[X_d],
-			       [Y_d]])
+	let E:matrixts.Matrix = new matrixts.Matrix(2,1)
+    
+	E.data = [
+			[X_d],
+			[Y_d]
+	    ]
 
-	let E_inv:math.Matrix = math.inv(E)
+	let E_inv:matrixts.Matrix = matrixts.inv(E)
+	let F:matrixts.Matrix = matrixts.multiply(D,E_inv) 
 
-        let F:math.Matrix = math.multiply(D,E_inv) 
-	let PHI_d:number = F.subset(math.index(0,0))
-	let PSI_d:number = F.subset(math.index(1,0))
+    
+	let PHI_d:number = F.data[0][0]
+	let PSI_d:number = F.data[1][0]
 
-	return [PHI, PSI, PHI_d, PSI_d]
+	//INVERSE KINEMATICS (ACCELERATION CALCULATION)
+	let G:matrixts.Matrix = new matrixts.Matrix(2,2)
+	G.data = [
+			[-c*Math.sin(PHI), -b*Math.sin(PSI)], 
+			[ c*Math.cos(PHI),  b*Math.cos(PSI)]
+		]
+
+	let H:matrixts.Matrix = new matrixts.Matrix(2,1)
+	H.data = [
+			[X_dd + c*Math.cos(PHI)*PHI_d**2 + b*Math.cos(PSI)*PSI_d**2],
+			[Y_dd + c*Math.sin(PHI)*PHI_d**2 + b*Math.sin(PSI)*PSI_d**2]
+
+		]
+
+	let H_inv:matrixts.Matrix = matrixts.inv(H)
+	let L:matrixts.Matrix = matrixts.multiply(G,H_inv)
+
+	PHI_dd = L.data[0][0]
+	PSI_dd = L.data[1][0]
+
+
+	return [PHI, PSI, PHI_d, PSI_d, PHI_dd, PSI_dd]
 }
 
 function RP_Fwd(a:number, Xq:number, Yq:number, r:number, PHI:number, r_d:number, PHI_d:number, r_dd:number, PHI_dd:number):number[]{
