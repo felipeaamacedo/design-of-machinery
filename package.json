@@ -19,7 +19,7 @@
   "homepage": "https://github.com/felipeaamacedo/design-of-machinery#readme",
   "dependencies": {
     "@felipeaamacedo/matrix-ts": "^1.0.4",
-    "@types/mathjs": "^6.0.7",
-    "mathjs": "^8.0.1"
+    "@types/mathjs": "^6.0.11",
+    "mathjs": "^8.1.1"
   }
 }
