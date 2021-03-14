@@ -1,24 +1,10 @@
-import matrixts from "@felipeaamacedo/matrix-ts"
-
+import mathjs from 'mathjs'
 //This is a code that has the function to analyse the main types of kinematics pairs.
-//
 
-/* --- INPUT PARAMETERS --- */
-let c:number = 3;
-let b:number = 4;
-
-let PHI:number = 30/180*Math.PI;
-let PSI:number = 45/180*Math.PI;
-
-let PHI_d:number = 4;
-let PSI_d:number = 2;
-
-let PHI_dd:number = 10;
-let PSI_dd:number = 0;
 
 /* --- CALCULATION --- */
 
-function RR_Fwd(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:number, PHI_dd:number, PSI_dd:number):number[] {
+export function RR_Fwd(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:number, PHI_dd:number, PSI_dd:number):number[] {
 	let X = c*Math.cos(PHI) + b*Math.cos(PSI)	
 	let Y = c*Math.sin(PHI) + b*Math.sin(PSI)
 
@@ -40,7 +26,7 @@ function RR_Fwd(c:number, b:number, PHI:number, PSI:number, PHI_d:number, PSI_d:
 	)
 }
 
-function RR_Inv(b:number, c:number, Xa:number, Ya:number, Xq:number, Yq:number, X_d:number, Y_d:number, X_dd:number, Y_dd:number, I:number):number[]{
+export function RR_Inv(b:number, c:number, Xa:number, Ya:number, Xq:number, Yq:number, X_d:number, Y_d:number, X_dd:number, Y_dd:number, I:number):number[]{
 	//INVERSE KINEMATICS (POSITION CALCULATION)
 	let X = Xa - Xq
        	let Y = Ya - Yq
@@ -67,51 +53,47 @@ function RR_Inv(b:number, c:number, Xa:number, Ya:number, Xq:number, Yq:number, 
 	
 	// INVERSE KINEMATICS (VELOCITY CALCULATION)
 	
-	let D:matrixts.Matrix = new matrixts.Matrix(2,2)
-    D.data = [
+    let D:number[][] = [
                 [- c* Math.sin(PHI),	- b*Math.sin(PSI)],
 			    [c*Math.cos(PHI), 		b*Math.cos(PSI)]
             ]	
 
-	let E:matrixts.Matrix = new matrixts.Matrix(2,1)
+	 
     
-	E.data = [
-			[X_d],
-			[Y_d]
-	    ]
+	let	E:number[][] = [
+				[X_d],
+				[Y_d]
+			]
 
-	let E_inv:matrixts.Matrix = matrixts.inv(E)
-	let F:matrixts.Matrix = matrixts.multiply(D,E_inv) 
+	let E_inv:number[][] = mathjs.inv(E)
+	let F:number[][] = mathjs.multiply(D,E_inv) 
 
     
-	let PHI_d:number = F.data[0][0]
-	let PSI_d:number = F.data[1][0]
+	let PHI_d:number = F[0][0]
+	let PSI_d:number = F[1][0]
 
 	//INVERSE KINEMATICS (ACCELERATION CALCULATION)
-	let G:matrixts.Matrix = new matrixts.Matrix(2,2)
-	G.data = [
+	let G:number[][] = [
 			[-c*Math.sin(PHI), -b*Math.sin(PSI)], 
 			[ c*Math.cos(PHI),  b*Math.cos(PSI)]
 		]
 
-	let H:matrixts.Matrix = new matrixts.Matrix(2,1)
-	H.data = [
+	let H:number[][] = [
 			[X_dd + c*Math.cos(PHI)*PHI_d**2 + b*Math.cos(PSI)*PSI_d**2],
 			[Y_dd + c*Math.sin(PHI)*PHI_d**2 + b*Math.sin(PSI)*PSI_d**2]
 
 		]
 
-	let H_inv:matrixts.Matrix = matrixts.inv(H)
-	let L:matrixts.Matrix = matrixts.multiply(G,H_inv)
+	let H_inv:number[][] = mathjs.inv(H)
+	let L:number[][] = mathjs.multiply(G,H_inv)
 
-	PHI_dd = L.data[0][0]
-	PSI_dd = L.data[1][0]
-
+	let PHI_dd = L[0][0]
+	let PSI_dd = L[1][0]
 
 	return [PHI, PSI, PHI_d, PSI_d, PHI_dd, PSI_dd]
 }
 
-function RP_Fwd(a:number, Xq:number, Yq:number, r:number, PHI:number, r_d:number, PHI_d:number, r_dd:number, PHI_dd:number):number[]{
+export function RP_Fwd(a:number, Xq:number, Yq:number, r:number, PHI:number, r_d:number, PHI_d:number, r_dd:number, PHI_dd:number):number[]{
 	
 	//FORWARD KINEMATICS (POSITION CALCULATION)
 	let X:number = -a*Math.sin(PHI) + r*Math.cos(PHI)
@@ -130,5 +112,3 @@ function RP_Fwd(a:number, Xq:number, Yq:number, r:number, PHI:number, r_d:number
 
 	return [Xa, Ya, Xa_d, Ya_d, Xa_dd, Ya_dd]
 }
-
-console.log(RR_Fwd(c,b,PHI,PSI,PHI_d,PSI_d,PHI_dd,PSI_dd))
